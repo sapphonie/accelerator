@@ -21,6 +21,6 @@ jobs:
             pwd &&
             ls -la &&
             mkdir /accelerator &&
-            cp * /accelerator -Rfv ;
+            cp -rT /accelerator ${pwd} ;
             cd /accelerator &&
             bash ./cicd/_accelerator_docker_build_internal.sh
