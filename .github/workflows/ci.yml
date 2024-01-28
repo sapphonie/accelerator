@@ -5,15 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     container: debian:11-slim
     steps:
-        - name: Install git on container
+        - name: Install / configure git on container
           run: |
             apt-get update
             apt-get install -y git --no-install-recommends
+            git config --global --add safe.directory *
 
         - name: Checkout Project
           uses: actions/checkout@v4
           with:
-            set-safe-directory: '*'
+            submodules: recursive
 
         - name: Checkout submodules
           run: |
