@@ -6,7 +6,7 @@ pwd
 ls -la
 
 mkdir /accelerator
-cp -rT /accelerator "$(pwd)"
+cp -av "$(pwd)"/. /accelerator
 cd /accelerator
 
 pwd
