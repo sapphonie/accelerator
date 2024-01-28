@@ -8,9 +8,12 @@ jobs:
         - name: Checkout Project
           uses: actions/checkout@v4
           with:
-            submodules: 'recursive'
             set-safe-directory: '/'
 
+        - name: Checkout submodules
+          run: |
+            git submodule update --init --recursive
+        
         - name: Run
           run: 
             pwd &&
