@@ -25,7 +25,7 @@ jobs:
             ls -la
             cd /accelerator
             cd build
-            7za a -r -v accelerator_linux.zip .
+            7za a -r accelerator_linux.zip .
             ls -la
             pwd
             cd ../
