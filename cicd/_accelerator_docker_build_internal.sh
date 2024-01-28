@@ -9,14 +9,21 @@ bootstrapPkgs()
         apt-get update -y &&            \
         apt-get install -y              \
 	--no-install-recommends		\
-        build-essential                 \
         git                             \
         clang                           \
+	make                            \
         python3-httplib2 python3-pip    \
         lib32stdc++-10-dev lib32z1-dev libc6-dev-i386 linux-libc-dev:i386 \
 	libzstd-dev libzstd-dev:i386 zlib1g-dev zlib1g-dev:i386
+
+	update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100
+	update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
+
+	cc --version || true
+	c++ --version || true
 }
 
+#        build-essential                 \
 
 #        libc6-dev-i386-cross            \
 
