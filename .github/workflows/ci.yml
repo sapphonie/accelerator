@@ -17,7 +17,7 @@ jobs:
             submodules: recursive
 
         - name: Run
-          run: 
+          run: |
             pwd
             ls -la
             mkdir /accelerator
