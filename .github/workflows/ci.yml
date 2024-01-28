@@ -18,6 +18,7 @@ jobs:
 
         - name: Run
           run: |
+            set -euxo pipefail
             pwd
             ls -la
             mkdir /accelerator
