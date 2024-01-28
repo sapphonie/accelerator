@@ -1,3 +1,4 @@
+# vim: set ts=2 sw=2 tw=99 noet ft=python:
 import os, sys
 
 project = builder.LibraryProject('accelerator.ext')
