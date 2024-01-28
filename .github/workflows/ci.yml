@@ -3,20 +3,21 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: debian:11
+    container: debian:11-slim
     steps:
         - name: Install git on container
           run: |
-            apt update
-            apt install -y git
+            apt-get update
+            apt-get install -y git --no-install-recommends
 
         - name: Checkout Project
           uses: actions/checkout@v4
           with:
-            set-safe-directory: '/'
+            set-safe-directory: '*'
 
         - name: Checkout submodules
           run: |
+            git config --global --add safe.directory *
             git submodule update --init --recursive
         
         - name: Run
