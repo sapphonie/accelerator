@@ -10,6 +10,7 @@ jobs:
             apt-get update
             apt-get install -y git --no-install-recommends
             git config --global --add safe.directory *
+            apt-get install --reinstall ca-certificates
 
         - name: Checkout Project
           uses: actions/checkout@v4
