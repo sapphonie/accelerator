@@ -1,3 +1,6 @@
 [submodule "breakpad"]
 	path = breakpad
 	url = https://github.com/google/breakpad.git
+[submodule "protobuf"]
+	path = third_party
+	url = https://github.com/google/protobuf.git
