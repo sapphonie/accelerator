@@ -151,5 +151,5 @@ class AcceleratorConfig(object):
 Accelerator = AcceleratorConfig()
 Accelerator.configure()
 
-BuildScripts = ['extension/AMBuilder']
+BuildScripts = ['extension/AMBuilder', 'buildbot/PackageScript']
 builder.Build(BuildScripts, { 'Accelerator': Accelerator })

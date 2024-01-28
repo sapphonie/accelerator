@@ -1,13 +1,13 @@
 #!/bin/sh
 set -ex
 
-cd breakpad
+cd third_party/breakpad
 git reset --hard
-git apply ../patches/*.patch
+git apply ../../patches/*.patch
 
 cd src/third_party
-ln -sf ../../../third_party/protobuf protobuf
-ln -sf ../../../third_party/lss lss
+ln -sf ../../../protobuf protobuf
+ln -sf ../../../lss lss
 cd ../..
 
 mkdir -p build
