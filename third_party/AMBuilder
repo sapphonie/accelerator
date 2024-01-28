@@ -108,6 +108,8 @@ for cxx in Accelerator.targets:
   for library in libraries:
     binary = Accelerator.ConfigureLibrary(library, cxx, builder)
     compiler = binary.compiler
+    # Wait for breakpad to be patched
+    compiler.sourcedeps += Accelerator.breakpad_patch
 
     compiler.cxxincludes += [
       os.path.join(builder.currentSourcePath, 'breakpad', 'src')

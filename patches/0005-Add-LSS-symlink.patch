@@ -1,0 +1,8 @@
+diff --git a/src/third_party/lss b/src/third_party/lss
+new file mode 120000
+index 00000000..6b10b582
+--- /dev/null
++++ b/src/third_party/lss
+@@ -0,0 +1 @@
++../../../lss
+\ No newline at end of file

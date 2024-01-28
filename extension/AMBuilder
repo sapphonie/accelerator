@@ -19,6 +19,8 @@ def AddSourceFilesFromDir(path, files):
 for cxx in Accelerator.targets:
   binary = Accelerator.ConfigureExtension(project, cxx, builder)
   compiler = binary.compiler
+  # Wait for breakpad to be patched
+  compiler.sourcedeps += Accelerator.breakpad_patch
   # We depend on breakpad on config
   compiler.sourcedeps += Accelerator.breakpad_config[compiler.target.arch]
 
@@ -48,11 +50,6 @@ for cxx in Accelerator.targets:
       'linux/elf_symbols_to_module.cc',
       'linux/breakpad_getcontext.S'
 		])
-
-    compiler.postlink += [
-      #os.path.join(builder.currentSourcePath, '..', 'third_party', 'breakpad', 'build', compiler.target.arch, 'src', 'libbreakpad.a'),
-      #os.path.join(builder.currentSourcePath, '..', 'third_party', 'breakpad', 'build', compiler.target.arch, 'src', 'third_party', 'libdisasm', 'libdisasm.a'),
-    ]
 
   Accelerator.link_libbreakpad_client(compiler, builder)
   Accelerator.link_libbreakpad(compiler, builder)

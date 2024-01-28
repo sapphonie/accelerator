@@ -31,9 +31,11 @@ class AcceleratorConfig(object):
     self.libbreakpad_client = None
     self.libbreakpad = None
     self.libdisasm = None
+    self.breakpad_patch = None
     self.targets = []
     self.target_archs = set()
     self.breakpad_config = dict()
+    self.breakpad_patch = None
 
     if builder.options.targets:
       target_archs = builder.options.targets.split(',')
@@ -186,7 +188,7 @@ class AcceleratorConfig(object):
 Accelerator = AcceleratorConfig()
 Accelerator.configure()
 
-builder.Build(['third_party/AMBuilder', 'third_party/Configure'], { 'Accelerator': Accelerator })
+builder.Build(['third_party/Patch', 'third_party/Configure', 'third_party/AMBuilder'], { 'Accelerator': Accelerator })
 
-BuildScripts = ['extension/AMBuilder']#, 'buildbot/PackageScript']
+BuildScripts = ['extension/AMBuilder', 'buildbot/PackageScript']
 builder.Build(BuildScripts, { 'Accelerator': Accelerator })
