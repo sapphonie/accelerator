@@ -5,6 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     container: debian:11
     steps:
+        - name: Install git on container
+          run: |
+            apt update
+            apt install -y git
+
         - name: Checkout Project
           uses: actions/checkout@v4
           with:
