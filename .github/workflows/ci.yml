@@ -8,9 +8,8 @@ jobs:
         - name: Install / configure git on container
           run: |
             apt-get update
-            apt-get install -y git --no-install-recommends
+            apt-get install -y git ca-certificates --no-install-recommends --reinstall
             git config --global --add safe.directory *
-            apt-get install --reinstall ca-certificates
 
         - name: Checkout Project
           uses: actions/checkout@v4
