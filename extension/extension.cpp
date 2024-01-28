@@ -115,10 +115,10 @@ SMEXT_LINK(&g_accelerator);
 IWebternet *webternet;
 IGameConfig *gameconfig;
 
-typedef void (*GetSpew_t)(char *buffer, unsigned int length);
+typedef void (*GetSpew_t)(char *buffer, size_t length);
 GetSpew_t GetSpew;
 #if defined _WINDOWS
-typedef void(__fastcall *GetSpewFastcall_t)(char *buffer, unsigned int length);
+typedef void(__fastcall *GetSpewFastcall_t)(char *buffer, size_t length);
 GetSpewFastcall_t GetSpewFastcall;
 #endif
 
@@ -557,17 +557,17 @@ class UploadThread: public IThread
 		};
 
 		std::ostringstream outputStream;
-		google_breakpad::DumpOptions options(ALL_SYMBOL_DATA, true);
+		google_breakpad::DumpOptions options(ALL_SYMBOL_DATA, true, false);
 
 		{
 			StderrInhibitor stdrrInhibitor;
 
-			if (!WriteSymbolFile(debugFile, debug_dirs, options, outputStream)) {
+			if (!WriteSymbolFile(debugFile, debugFile, "Linux", debug_dirs, options, outputStream)) {
 				outputStream.str("");
 				outputStream.clear();
 
 				// Try again without debug dirs.
-				if (!WriteSymbolFile(debugFile, {}, options, outputStream)) {
+				if (!WriteSymbolFile(debugFile, debugFile, "Linux", {}, options, outputStream)) {
 					if (log) fprintf(log, "Failed to process symbol file\n");
 					return false;
 				}
