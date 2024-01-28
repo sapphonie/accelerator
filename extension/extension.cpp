@@ -507,7 +507,9 @@ class UploadThread: public IThread
 		auto debugFile = module->debug_file();
 		std::string vdsoOutputPath = "";
 
-		if (debugFile == "linux-gate.so") {
+		// TODO: fix crash here
+		// -sappho, from Kenzzer
+		if (false && debugFile == "linux-gate.so") {
 			FILE *auxvFile = fopen("/proc/self/auxv", "rb");
 			if (auxvFile) {
 				char vdsoOutputPathBuffer[512];
