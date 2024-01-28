@@ -3,12 +3,13 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: debian:11-slim
+    container:
+      image: debian:11-slim
     steps:
         - name: Package bootstrapping and setup for Actions
           run: |
             apt-get update
-            apt-get install -y git ca-certificates bash p7zip-full --no-install-recommends --reinstall
+            apt-get install -y git ca-certificates bash --no-install-recommends --reinstall
             git config --global --add safe.directory *
 
         - name: Checkout project
@@ -19,20 +20,20 @@ jobs:
         - name: Run docker build
           run: bash ./cicd/_github_actions_setup.sh
 
-        - name: Zip packages
-          run: |
-            pwd
-            ls -la
-            cd /accelerator
-            cd build
-            7za a -r accelerator_linux.zip .
-            ls -la
-            pwd
-            cd ../
+        #- name: Zip packages
+        #  run: |
+        #    pwd
+        #    ls -la
+        #    cd /accelerator
+        #    cd build
+        #    7za a -r accelerator_linux.zip .
+        #    ls -la
+        #    pwd
+        #    cd ../
 
         - name: Upload artifacts
           uses: actions/upload-artifact@v4
           with:
-            name: Accelerator Linux build
+            name: Linux build
             path: |
-              /accelerator/build/accelerator_linux.zip
+              /accelerator/build/
