@@ -8,15 +8,17 @@ bootstrapPkgs()
     dpkg --add-architecture i386 &&     \
         apt-get update -y &&            \
         apt-get install -y              \
+	--no-install-recommends		\
         build-essential                 \
         git                             \
         clang                           \
         python3-httplib2 python3-pip    \
-        libc6-dev-i386-cross            \
         lib32stdc++-10-dev lib32z1-dev libc6-dev-i386 linux-libc-dev:i386 \
-	libzstd-dev libzstd-dev:i386 zlib1g-dev zlib1g-dev:i386 \
-        --no-install-recommends
+	libzstd-dev libzstd-dev:i386 zlib1g-dev zlib1g-dev:i386
 }
+
+
+#        libc6-dev-i386-cross            \
 
 amTempLocation="_am_temp"
 succCloneLocation="/accelerator/${amTempLocation}/successful_clone"

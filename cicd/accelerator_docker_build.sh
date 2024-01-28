@@ -1,7 +1,7 @@
 #!/bin/bash
-set -euxo pipefail 
+set -euxo pipefail
 
-dockerimage="debian:11"
+dockerimage="debian:11-slim"
 
 
 # we do this so that we can be agnostic about where we're invoked from
