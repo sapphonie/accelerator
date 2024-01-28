@@ -504,6 +504,9 @@ class UploadThread: public IThread
 
 #if defined _LINUX
 	bool UploadSymbolFile(const google_breakpad::CodeModule *module, const char *presubmitToken) {
+		if (log) fprintf(log, "UploadSymbolFile\n");
+		if (log) fflush(log);
+
 		auto debugFile = module->debug_file();
 		std::string vdsoOutputPath = "";
 
@@ -525,7 +528,11 @@ class UploadThread: public IThread
 					if (auxvEntryId == 0) break;
 					if (auxvEntryId != 33) continue; // AT_SYSINFO_EHDR
 
+#ifdef PLATFORM_X64
+					Elf64_Ehdr *vdsoHdr = (Elf64_Ehdr *)auxvEntryValue;
+#else
 					Elf32_Ehdr *vdsoHdr = (Elf32_Ehdr *)auxvEntryValue;
+#endif
 					auto vdsoSize = vdsoHdr->e_shoff + (vdsoHdr->e_shentsize * vdsoHdr->e_shnum);
 					void *vdsoBuffer = malloc(vdsoSize);
 					memcpy(vdsoBuffer, vdsoHdr, vdsoSize);
@@ -550,6 +557,7 @@ class UploadThread: public IThread
 		}
 
 		if (log) fprintf(log, "Submitting symbols for %s\n", debugFile.c_str());
+		if (log) fflush(log);
 
 		auto debugFileDir = google_breakpad::DirName(debugFile);
 		std::vector<string> debug_dirs{
@@ -559,7 +567,7 @@ class UploadThread: public IThread
 		};
 
 		std::ostringstream outputStream;
-		google_breakpad::DumpOptions options(ALL_SYMBOL_DATA, true, false);
+		google_breakpad::DumpOptions options(ALL_SYMBOL_DATA, true, true);
 
 		{
 			StderrInhibitor stdrrInhibitor;
@@ -571,6 +579,7 @@ class UploadThread: public IThread
 				// Try again without debug dirs.
 				if (!WriteSymbolFile(debugFile, debugFile, "Linux", {}, options, outputStream)) {
 					if (log) fprintf(log, "Failed to process symbol file\n");
+					if (log) fflush(log);
 					return false;
 				}
 			}
@@ -609,6 +618,7 @@ class UploadThread: public IThread
 
 		if (!symbolUploaded) {
 			if (log) fprintf(log, "Symbol upload failed: %s (%d)\n", xfer->LastErrorMessage(), xfer->LastErrorCode());
+			if (log) fflush(log);
 			return false;
 		}
 
@@ -621,7 +631,7 @@ class UploadThread: public IThread
 		}
 		if (log) fprintf(log, "Symbol upload complete: %s\n", response);
 		delete[] response;
-
+		if (log) fflush(log);
 		return true;
 	}
 #endif
@@ -638,6 +648,7 @@ class UploadThread: public IThread
 		}
 
 		if (log) fprintf(log, "Submitting binary for %s\n", codeFile.c_str());
+		if (log) fflush(log);
 
 		IWebForm *form = webternet->CreateForm();
 
@@ -667,6 +678,7 @@ class UploadThread: public IThread
 
 		if (!binaryUploaded) {
 			if (log) fprintf(log, "Binary upload failed: %s (%d)\n", xfer->LastErrorMessage(), xfer->LastErrorCode());
+			if (log) fflush(log);
 			return false;
 		}
 
@@ -678,6 +690,7 @@ class UploadThread: public IThread
 			response[--responseSize] = '\0';
 		}
 		if (log) fprintf(log, "Binary upload complete: %s\n", response);
+		if (log) fflush(log);
 		delete[] response;
 
 		return true;
@@ -973,12 +986,14 @@ class UploadThread: public IThread
 				if (!submitSymbols && !submitBinary) {
 					continue;
 				}
+				if (log) fprintf(log, "Getting module at index %d\n", moduleIndex);
+				if (log) fflush(log);
 
 				auto module = processState.modules()->GetModuleAtIndex(moduleIndex);
 
 				auto moduleType = ClassifyModule(module);
 				if (log) fprintf(log, "Classified module %s as %s\n", module->code_file().c_str(), ModuleTypeCode[moduleType]);
-
+				if (log) fflush(log);
 				switch (moduleType) {
 					case kMTUnknown:
 						continue;
@@ -1011,6 +1026,8 @@ class UploadThread: public IThread
 #endif
 			}
 		}
+		if (log) fprintf(log, "PresubmitCrashDump complete\n");
+		if (log) fflush(log);
 
 		delete[] response;
 		return presubmitResponse;
