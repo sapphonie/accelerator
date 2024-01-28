@@ -5,13 +5,11 @@ import re
 def Normalize(path):
   return os.path.abspath(os.path.normpath(os.path.join(path)))
 
-def AddPatchesFromDir(path):
-  patches = []
-  path = Normalize(path)
-  for item in os.scandir(path):
-    if item.is_file():
-        patches.append(item.path)
-  return patches
+def AddFilesFromDir(path, files):
+  list = []
+  for file in files:
+    list.append(os.path.join(path, file))
+  return list
 
 def AddCwdCommand(context, cwd, inputs,
   argv,
@@ -35,7 +33,13 @@ def AddCwdCommand(context, cwd, inputs,
 
 
 git_dir = Normalize(os.path.join(builder.currentSourcePath, 'breakpad'))
-patches = AddPatchesFromDir(os.path.join(builder.currentSourcePath, '..', 'patches'))
+patches = AddFilesFromDir(os.path.join(builder.currentSourcePath, '..', 'patches'), [
+  "0001-Ignore-invalid-modules-rather-than-bailing-on-the-en.patch",
+  "0002-Write-FUNC-records-instead-of-PUBLIC-for-ELF-symbols.patch",
+  "0003-Support-compilation-on-VS-2015.patch",
+  "0004-Fix-Linux-a-out-include.patch",
+  "0005-Add-LSS.patch"
+])
 
 # Reset the breakpad directory before applying patches
 argv = [
@@ -61,7 +65,7 @@ num = 0
 for patch in patches:
   patch_argv = argv + [patch]
   git_patches += AddCwdCommand(builder, git_dir,
-  inputs=[patch], # Redo the command if the patch changed
+  inputs=patches, # Redo the command if the patches changed
   outputs=[],
   fake_output=str(num) + '_patch.txt',
   argv=patch_argv,
