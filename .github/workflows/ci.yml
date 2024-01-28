@@ -16,13 +16,5 @@ jobs:
           with:
             submodules: recursive
 
-        - name: Run
-          run: |
-            set -euxo pipefail
-            pwd
-            ls -la
-            mkdir /accelerator
-            cp -rT /accelerator $(pwd)
-            cd /accelerator
-            pwd
-            bash ./cicd/_accelerator_docker_build_internal.sh
+        - name: Run docker build
+          run: bash ./cicd/_github_actions_setup.sh
