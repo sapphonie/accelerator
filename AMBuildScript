@@ -123,6 +123,12 @@ class AcceleratorConfig(object):
     return
 
   def configure_msvc(self, cxx):
+
+    cxx.cxxflags += [
+      '/EHsc',
+      '/std:c++17'
+    ]
+
     return
   
   def configure_linux(self, cxx):
@@ -131,6 +137,11 @@ class AcceleratorConfig(object):
     return
   
   def configure_windows(self, cxx):
+    cxx.defines += ['_WINDOWS']
+    if cxx.target.arch == 'x86':
+      cxx.defines += ['WIN32']
+    elif cxx.target.arch == 'x86_64':
+      cxx.defines += ['WIN64']
     return
   
   def configure(self):
@@ -153,7 +164,7 @@ class AcceleratorConfig(object):
     for task in self.libbreakpad_client:
       if task.target.arch == compiler.target.arch:
         compiler.postlink += [os.path.join(context.buildPath, task.binary.path)]
-        compiler.sourcedeps += [task.binary]
+        compiler.linkdeps += [task.binary]
         return
     raise Exception('No suitable build of libbreakpad_client was found.')
   
@@ -161,7 +172,7 @@ class AcceleratorConfig(object):
     for task in self.libbreakpad:
       if task.target.arch == compiler.target.arch:
         compiler.postlink += [os.path.join(context.buildPath, task.binary.path)]
-        compiler.sourcedeps += [task.binary]
+        compiler.linkdeps += [task.binary]
         return
     raise Exception('No suitable build of libbreakpad was found.')
   
@@ -169,7 +180,7 @@ class AcceleratorConfig(object):
     for task in self.libdisasm:
       if task.target.arch == compiler.target.arch:
         compiler.postlink += [os.path.join(context.buildPath, task.binary.path)]
-        compiler.sourcedeps += [task.binary]
+        compiler.linkdeps += [task.binary]
         return
     raise Exception('No suitable build of libdisasm was found.')
 
