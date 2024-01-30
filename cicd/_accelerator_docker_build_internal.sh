@@ -55,11 +55,6 @@ bootstrapAM()
     popd
 }
 
-# TODO: move this all into cicd folder
-bootstrapBreakpad()
-{
-    bash breakpad.sh
-}
 
 buildIt()
 {
@@ -89,10 +84,6 @@ git config --global --add safe.directory /
 git config --global --add safe.directory /accelerator/breakpad
 
 
-if bootstrapAM; then
-    bootstrapBreakpad
-else
-    bootstrapBreakpad
-fi
+bootstrapAM || true
 
 buildIt
