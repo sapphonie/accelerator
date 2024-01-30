@@ -118,6 +118,8 @@ class AcceleratorConfig(object):
       '-Wno-implicit-exception-spec-mismatch'
     ]
 
+    cxx.postlink += ['-pthread', '-lz']
+
     if builder.options.opt == '1':
       cxx.cflags += ['-O3']
     return
@@ -133,7 +135,6 @@ class AcceleratorConfig(object):
   
   def configure_linux(self, cxx):
     cxx.defines += ['_LINUX', 'POSIX', '_GLIBCXX_USE_CXX11_ABI=0']
-    cxx.postlink += ['-pthread', '-lz']
     return
   
   def configure_windows(self, cxx):
