@@ -42,12 +42,9 @@ bootstrapAM()
     rm -rf /accelerator/"${amTempLocation}"/    || true
     mkdir -p ${amTempLocation}                  || exit 1
     pushd ${amTempLocation}                     || exit 1
-        git clone --recursive https://github.com/alliedmodders/sourcemod || exit 1
-
-        # skip downloading mysql we do not care about it
-        bash sourcemod/tools/checkout-deps.sh -m || exit 1
-
-        # we need to do this no matter what for some fcking reason
+        git clone -b master   --recursive --depth 1 https://github.com/alliedmodders/sourcemod sourcemod || exit 1
+        git clone -b 1.12-dev --recursive --depth 1 https://github.com/alliedmodders/metamod-source metamod-source || exit 1
+	git clone             --recursive --depth 1 https://github.com/alliedmodders/ambuild ambuild || exit 1
         pip install ./ambuild
 
         # make a blank file so that we don't reclone everything if we don't need to
@@ -63,13 +60,7 @@ buildIt()
     fi
 
     pushd build
-        CC=clang CXX=clang++ python3 ../configure.py \
-        --sm-path=/accelerator/${amTempLocation}/sourcemod/
-
-# \
- #       --mms-path=/accelerator/${amTempLocation}/mmsource-1.12/    \
-   #     --hl2sdk-root=/accelerator/${amTempLocation}/               \
-
+        CC=clang CXX=clang++ python3 ../configure.py --sm-path=/accelerator/${amTempLocation}/sourcemod/
         ambuild
     popd
 }
