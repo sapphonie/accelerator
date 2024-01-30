@@ -16,5 +16,5 @@ args = { 'args': ' '.join(argv),
 p = subprocess.Popen(**args)
 stdout, stderr = p.communicate()
 if p.returncode != 0:
-  raise Exception('terminated with non-zero exitcode {0}'.format(p.returncode))
+  raise Exception('terminated with non-zero exitcode {0} - out/err = {1} / {2}'.format(p.returncode, stdout, stderr))
 sys.exit(p.returncode)
