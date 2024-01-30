@@ -32,8 +32,8 @@ pushd "${script_folder}" &> /dev/null || exit 99
             itflag=""
         fi
 
-        docker run ${itflag}                            \
-        -v "${dev_srcdir}":/${container_rootdir}        \
+        podman run ${itflag}                            \
+        -v "${dev_srcdir}":/"${container_rootdir}"        \
         -w /${container_rootdir}                        \
         ${dockerimage}                                  \
         bash ./${build_dir}/${internalscript} "$@"
